@@ -21,7 +21,7 @@ export PATH=/usr/local/Ascend/8.5.0/compiler/bishengir/bin:$PATH
 export ASCEND_RT_VISIBLE_DEVICES=4,5,6,7
 #export PYTORCH_NPU_ALLOC_CONF=expandable_segments:True
 
-MODEL_PATH=/data/ascend-ci-share-pkking-sglang/modelscope/hub/models/Qwen/Qwen3-30B-A3B-w8a8
+MODEL_PATH=/data/ascend-ci-share-pkking-sglang/modelscope/hub/models/Qwen3-8B-w8a8
 MODEL_PATH_SPECULATIVE=/data/ascend-ci-share-pkking-sglang/modelscope/hub/models/Qwen/Qwen3-32B-Eagle3
 export SGLANG_DISAGGREGATION_BOOTSTRAP_TIMEOUT=600
 
