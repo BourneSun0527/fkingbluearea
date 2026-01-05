@@ -55,4 +55,4 @@ python -m sglang.launch_server --model-path $MODEL_PATH \
 #--speculative-num-steps 1 --speculative-eagle-topk 1 --speculative-num-draft-tokens 2 \
 
 exit 1
-python3 -m sglang.bench_serving     --dataset-path /home/s30055683/fkingbluearea/GSM8K-in3500-bs4000_qw32.jsonl     --dataset-name gsm8k --backend sglang     --host 127.0.0.1 --port 7239     --max-concurrency 78 --random-output-len 1500 --random-input-len 3500 --num-prompts 312
+python3 -m sglang.bench_serving     --dataset-path /home/s30055683/GSM8K-in520-bs2.jsonl     --dataset-name gsm8k --backend sglang     --host 127.0.0.1 --port 7239     --max-concurrency 78 --random-output-len 1500 --random-input-len 3500 --num-prompts 312
