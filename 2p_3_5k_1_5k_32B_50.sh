@@ -7,8 +7,7 @@ sysctl -w kernel.sched_migration_cost_ns=50000
 export SGLANG_SET_CPU_AFFINITY=1
 # 设置PYTHONPATH
 
-cd /home/chenxu/sglang
-export PYTHONPATH=${PWD}/python:$PYTHONPATH
+export PYTHONPATH=/home/s30055683/sglang/python:$PYTHONPATH
 unset https_proxy
 unset http_proxy
 unset HTTPS_PROXY
