@@ -1,0 +1,295 @@
+{
+  "kernel_name": "split_qkv_rmsnorm_rope_kernel",
+  "elapsed_time_us": 12.8,
+  "diagnosis": "Insufficient Parallelism",
+  "bound_kind": null,
+  "dominant_component": null,
+  "dominant_item": null,
+  "dominant_share": 0.0,
+  "exposed_control_frac_model": null,
+  "exposed_control_frac_measured": null,
+  "exposed_control_deficit_pts": null,
+  "exposed_control_deficit_us": null,
+  "n_sync_ops": null,
+  "hivm_bottleneck": {
+    "global_root_cause": "SyncOverhead",
+    "global_evidence": "[syncCycles=12362 cyc, barrierCycles=112 cyc, oneIterationCycles=8643 cyc, sync=143.0%, barrier=1.3%]",
+    "global_explanation": "sync/barrier ratio exceeds HIVMBottleneckDiagnoser thresholds (sync>20% or barrier>15%)",
+    "global_suggestions": [
+      "减少全局 barrier，优先使用局部 set_flag/wait_flag",
+      "增加 multi-buffer pipeline depth 以隐藏同步等待"
+    ],
+    "sync_overhead_ratio": 143.02904084230013,
+    "barrier_overhead_ratio": 1.2958463496471133,
+    "one_iteration_cycles": 8643.0,
+    "weighted_cycles": 5431.0,
+    "pipe_busy_cycles": {
+      "PIPE_V": 5367.0,
+      "PIPE_MTE3": 2371.0,
+      "PIPE_MTE2_V": 4709.0,
+      "PIPE_S": 600.0
+    },
+    "weighted_pipe_cycles": {
+      "PIPE_V": 5367.0,
+      "PIPE_MTE3": 2371.0,
+      "PIPE_MTE2_V": 4709.0,
+      "PIPE_S": 600.0
+    },
+    "pipeline_diagnosis": {
+      "root_cause": "PipelineImbalance",
+      "bottleneck_pipe": "PIPE_V",
+      "imbalance_ratio": 8.945,
+      "evidence": "[weightedPipeCycles[PIPE_V]=5367, weightedPipeCycles[PIPE_S]=600, ratio=8.9x]",
+      "explanation": "PIPE_V weighted cycles dominate PIPE_S by 8.9x",
+      "suggestions": [
+        "将 PIPE_V 工作与其他 pipe 通过 multi-buffer/software pipeline 重叠",
+        "检查 Cube/Vector split 是否能更均衡利用 AIC/AIV"
+      ]
+    },
+    "op_diagnoses": [
+      {
+        "op_id": 25,
+        "line_number": 122,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_MTE2_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_MTE2_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 26,
+        "line_number": 126,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_MTE2_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_MTE2_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 30,
+        "line_number": 130,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 32,
+        "line_number": 139,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_MTE2_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_MTE2_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 39,
+        "line_number": 148,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 40,
+        "line_number": 149,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 45,
+        "line_number": 163,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_MTE3",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_MTE3: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 57,
+        "line_number": 216,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_MTE2_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_MTE2_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 58,
+        "line_number": 220,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_MTE2_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_MTE2_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      },
+      {
+        "op_id": 62,
+        "line_number": 224,
+        "op_name": "wait_flag",
+        "pipe": "PIPE_V",
+        "root_cause": "SyncOverhead",
+        "evidence": "[is_sync=True, is_barrier=False, duration=250 cyc]",
+        "explanation": "wait_flag on PIPE_V: synchronization/control op with no arithmetic/transfer work",
+        "suggestions": [
+          "调整 producer/consumer 排序，减少 wait stall 时间"
+        ],
+        "theoretical_min_cycles": 0.0,
+        "actual_cycles": 250.0,
+        "overhead_ratio": 1.0
+      }
+    ],
+    "warnings": [
+      "DES graph 中 flops 全部为 0；compute theoretical_min 需要回退或依赖 extractor 推断",
+      "DES graph 中 src_space 为空的 op 占比 85.6%；memory path 诊断会使用带宽回退",
+      "DES graph 中 dst_space 为空的 op 占比 85.6%；memory path 诊断会使用带宽回退",
+      "calibration 缺少 startup_latency['vector']；HIVM bottleneck diagnosis 使用 35 cycles 回退值",
+      "calibration 缺少 startup_latency['mte2']；HIVM bottleneck diagnosis 使用 50 cycles 回退值",
+      "calibration 缺少 startup_latency['mte3']；HIVM bottleneck diagnosis 使用 40 cycles 回退值"
+    ]
+  },
+  "components": {
+    "vector": {
+      "component": "vector",
+      "work_done": 1152.0,
+      "bound_work": 1152.0,
+      "elapsed_time_us": 12.8,
+      "active_time_us": 1.162,
+      "actual_performance": 90.0,
+      "ideal_performance": 15133.235851136873,
+      "u_utilization": 0.0059471748729296925,
+      "r_residency": 0.09078125,
+      "e_efficiency": 0.06551104851419971,
+      "dominant_item": "bf16",
+      "dominant_share": 1.0,
+      "warnings": []
+    },
+    "scalar": {
+      "component": "scalar",
+      "work_done": 0.0,
+      "bound_work": 0,
+      "elapsed_time_us": 12.8,
+      "active_time_us": 1.968,
+      "actual_performance": 0.0,
+      "ideal_performance": 0.0,
+      "u_utilization": 0.0,
+      "r_residency": 0.15375,
+      "e_efficiency": 0.0,
+      "dominant_item": null,
+      "dominant_share": 0.0,
+      "warnings": [
+        "profiling 中有该 component，但理论 bound 中没有对应 work",
+        "该 component 没有正数的 ideal performance"
+      ]
+    },
+    "mte_gm": {
+      "component": "mte_gm",
+      "work_done": 0.0,
+      "bound_work": 0.0,
+      "elapsed_time_us": 12.8,
+      "active_time_us": 2.428,
+      "actual_performance": 0.0,
+      "ideal_performance": 0.0,
+      "u_utilization": 0.0,
+      "r_residency": 0.18968749999999998,
+      "e_efficiency": 0.0,
+      "dominant_item": null,
+      "dominant_share": 0.0,
+      "warnings": [
+        "profiling 中有该 component，但理论 bound 中没有对应 work",
+        "该 component 没有正数的 ideal performance"
+      ]
+    },
+    "mte_ub": {
+      "component": "mte_ub",
+      "work_done": 0.0,
+      "bound_work": 0.0,
+      "elapsed_time_us": 12.8,
+      "active_time_us": 0.809,
+      "actual_performance": 0.0,
+      "ideal_performance": 0.0,
+      "u_utilization": 0.0,
+      "r_residency": 0.063203125,
+      "e_efficiency": 0.0,
+      "dominant_item": null,
+      "dominant_share": 0.0,
+      "warnings": [
+        "profiling 中有该 component，但理论 bound 中没有对应 work",
+        "该 component 没有正数的 ideal performance"
+      ]
+    }
+  },
+  "warnings": [
+    "scalar: profiling 中有该 component，但理论 bound 中没有对应 work",
+    "scalar: 该 component 没有正数的 ideal performance",
+    "mte_gm: profiling 中有该 component，但理论 bound 中没有对应 work",
+    "mte_gm: 该 component 没有正数的 ideal performance",
+    "mte_ub: profiling 中有该 component，但理论 bound 中没有对应 work",
+    "mte_ub: 该 component 没有正数的 ideal performance",
+    "hivm_bottleneck: DES graph 中 flops 全部为 0；compute theoretical_min 需要回退或依赖 extractor 推断",
+    "hivm_bottleneck: DES graph 中 src_space 为空的 op 占比 85.6%；memory path 诊断会使用带宽回退",
+    "hivm_bottleneck: DES graph 中 dst_space 为空的 op 占比 85.6%；memory path 诊断会使用带宽回退",
+    "hivm_bottleneck: calibration 缺少 startup_latency['vector']；HIVM bottleneck diagnosis 使用 35 cycles 回退值",
+    "hivm_bottleneck: calibration 缺少 startup_latency['mte2']；HIVM bottleneck diagnosis 使用 50 cycles 回退值",
+    "hivm_bottleneck: calibration 缺少 startup_latency['mte3']；HIVM bottleneck diagnosis 使用 40 cycles 回退值"
+  ]
+}
